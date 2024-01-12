@@ -3,7 +3,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import axios from 'axios';
 import {
     Dialog,
@@ -25,6 +24,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FileUpload } from "@/components/file-upload";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -35,7 +35,11 @@ const formSchema = z.object({
     })
 })
 
-export const InitialModal = () => {
+export const CreateServerModal = () => {
+    const {isOpen, onClose, type} = useModal();
+
+    const isModalOpen = isOpen && type === "createServer"
+
     const router = useRouter()
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -44,11 +48,7 @@ export const InitialModal = () => {
             imageUrl: ""
         }
     })
-    const [isMounted, setIsMounted] = useState(false)
-    // fixing hydration error
-    useEffect(() => {
-        setIsMounted(true);
-    },[]);
+    
 
     // gets loading state
     const isLoading = form.formState.isSubmitting;
@@ -59,19 +59,19 @@ export const InitialModal = () => {
 
             form.reset();
             router.refresh();
-            window.location.reload();
+            onClose();
         } catch(error){
             console.log(error);
         }
     }
 
-    if(!isMounted){
-        return null;
+    const handleClose = () => {
+        form.reset();
+        onClose();
     }
-
     
     return(
-        <Dialog open>
+        <Dialog open={isModalOpen} onOpenChange={handleClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">Customise your server</DialogTitle>
