@@ -1,7 +1,7 @@
 import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db";
 import { redirectToSignIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
 interface InviteCodePageProps {
     params: {
@@ -9,7 +9,7 @@ interface InviteCodePageProps {
     }
 }
 
- export const InviteCodePage = async ({
+const InviteCodePage = async ({
     params
 }: InviteCodePageProps) => {
     const profile = await currentProfile();
@@ -21,7 +21,7 @@ interface InviteCodePageProps {
     if(!params.inviteCode){
         return redirect("/");
     }
-
+    console.log(params.inviteCode);
     const existingServer = await db.server.findFirst({
         where: {
             inviteCode: params.inviteCode,
@@ -56,6 +56,10 @@ interface InviteCodePageProps {
         return redirect(`/servers/${server.id}`)
     }
 
-    return null
+    return (
+        <></>
+    )
 }
+
+export default InviteCodePage;
 

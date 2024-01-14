@@ -60,6 +60,7 @@ const ServerHeader = ({
                 )}
                 {isAdmin && (
                     <DropdownMenuItem
+                    onClick={() => onOpen('editServer', { server })}
                     className="dark:text-white
                     px-3 py-4 text-sm cursor-pointer">
                         Settings
@@ -68,6 +69,7 @@ const ServerHeader = ({
                 )}
                 {isAdmin && (
                     <DropdownMenuItem
+                    onClick={() => onOpen("members", { server })}
                     className="dark:text-white
                     px-3 py-4 text-sm cursor-pointer">
                         Manage Members
